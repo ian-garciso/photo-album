@@ -1,0 +1,54 @@
+﻿{% extends 'gallery/base.html' %}
+{% block title %}Gallery | Photo Album Manager{% endblock %}
+{% block content %}
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 class="section-heading">Recipe Gallery</h1>
+            <p class="muted">Browse, search, and manage your album assets with secured access.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <form method="get" style="display: flex; gap: 0.75rem;">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search photos..." class="form-control" style="min-width: 220px;">
+                <button class="btn" type="submit">Search</button>
+            </form>
+            <a class="nav-link" href="{% url 'photo_upload' %}">Upload New Photo</a>
+        </div>
+    </div>
+
+    {% if photos %}
+        <div class="card-grid">
+            {% for photo in photos %}
+                <article class="photo-card">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ photo.title }}</h2>
+                        <p class="card-text">{{ photo.description|truncatewords:16 }}</p>
+                        <div class="card-meta">
+                            <span class="tag">{{ photo.uploaded_at|date:'M d, Y' }}</span>
+                            <div class="button-row">
+                                <a class="nav-link" href="{% url 'edit_recipe' photo.pk %}">Edit</a>
+                                <a class="nav-link danger-btn" href="{% url 'delete_recipe' photo.pk %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        {% if photos.has_other_pages %}
+            <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+                {% if photos.has_previous %}
+                    <a class="nav-link" href="?page={{ photos.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">&laquo; Previous</a>
+                {% endif %}
+                <span class="tag">Page {{ photos.number }} of {{ photos.paginator.num_pages }}</span>
+                {% if photos.has_next %}
+                    <a class="nav-link" href="?page={{ photos.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="text-center" style="padding: 3rem 0;">
+            <p class="muted">No photos found. Use the upload button above to add a new recipe asset.</p>
+        </div>
+    {% endif %}
+{% endblock %}

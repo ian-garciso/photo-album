@@ -1,0 +1,19 @@
+﻿{% extends 'gallery/base.html' %}
+{% block title %}Edit Photo | Photo Album Manager{% endblock %}
+{% block content %}
+    <h1 class="section-heading">Edit Photo</h1>
+    <p class="muted">Update the photo details or replace the image asset.</p>
+    <div style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
+        <img src="{{ object.image.url }}" alt="{{ object.title }}" style="width: 100%; border-radius: 24px; max-height: 380px; object-fit: cover;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group"> {{ form.title.label_tag }} {{ form.title }} </div>
+            <div class="form-group"> {{ form.description.label_tag }} {{ form.description }} </div>
+            <div class="form-group"> {{ form.image.label_tag }} {{ form.image }} </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+                <button type="submit" class="btn">Update Photo</button>
+                <a class="nav-link danger-btn" href="{% url 'delete_recipe' object.pk %}">Delete</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

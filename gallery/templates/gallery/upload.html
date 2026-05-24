@@ -1,0 +1,22 @@
+{% extends 'gallery/base.html' %}
+{% block title %}Upload Photo | Photo Album Manager{% endblock %}
+{% block content %}
+    <h1 class="section-heading">Upload a New Photo</h1>
+    <p class="muted">Only authenticated users with album permissions can add new photos.</p>
+    <form method="post" enctype="multipart/form-data" style="margin-top: 1.5rem;">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+        </div>
+        <button type="submit" class="btn">Upload Photo</button>
+    </form>
+{% endblock %}

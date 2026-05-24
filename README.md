@@ -5,6 +5,8 @@ A production-ready Django photo album management system with Cloudinary media st
 - Repository: https://github.com/ian-garciso/photo-album.git
 - Live demo: *replace-with-render-url*
 
+> The project includes `render.yaml` for Render service configuration. Set the required secrets in your Render dashboard and replace the live URL above once deployed.
+
 ## Features
 
 - Django 6 application with Class-Based Views (List, Create, Update, Delete)

@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: photo-album
+    env: python
+    plan: free
+    branch: main
+    repo: https://github.com/ian-garciso/photo-album.git
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn recipe_project.wsgi
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: USE_POSTGRES
+        value: True
+      - key: USE_LOCAL_MEDIA
+        value: False
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: ALLOWED_HOSTS
+        value: your-app.onrender.com

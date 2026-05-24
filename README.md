@@ -2,6 +2,9 @@
 
 A production-ready Django photo album management system with Cloudinary media storage, role-based access control, and Render deployment support.
 
+- Repository: https://github.com/ian-garciso/photo-album.git
+- Live demo: *replace-with-render-url*
+
 ## Features
 
 - Django 6 application with Class-Based Views (List, Create, Update, Delete)

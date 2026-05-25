@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import cloudinary
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -117,8 +118,17 @@ DATABASES = {
 USE_POSTGRES = os.getenv('USE_POSTGRES', 'False').lower() in ('true', '1', 'yes')
 
 if USE_POSTGRES:
-    DATABASE_URL = os.getenv('DATABASE_URL')
-    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+    DATABASE_URL = os.getenv('DATABASE_URL', '').strip()
+    if DATABASE_URL.startswith(("b'", 'b"')) and DATABASE_URL.endswith(("'", '"')):
+        DATABASE_URL = DATABASE_URL[2:-1]
+    if not DATABASE_URL:
+        raise ImproperlyConfigured('USE_POSTGRES=True but DATABASE_URL is not set.')
+    try:
+        DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+    except dj_database_url.UnknownSchemeError as exc:
+        raise ImproperlyConfigured(
+            f'Invalid DATABASE_URL scheme: {DATABASE_URL!r}. Use a valid PostgreSQL URL like postgres:// or postgresql://.'
+        ) from exc
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

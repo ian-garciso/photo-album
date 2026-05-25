@@ -29,10 +29,14 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    cleaned_host = RENDER_EXTERNAL_HOSTNAME.strip().removeprefix('https://').removeprefix('http://').rstrip('/')
+    if cleaned_host:
+        ALLOWED_HOSTS.append(cleaned_host)
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -110,11 +114,11 @@ DATABASES = {
     }
 }
 
-USE_POSTGRES = os.getenv('USE_POSTGRES', 'False') == 'True'
-DATABASE_URL = os.getenv('DATABASE_URL')
-if USE_POSTGRES and DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+USE_POSTGRES = os.getenv('USE_POSTGRES', 'False').lower() in ('true', '1', 'yes')
 
+if USE_POSTGRES:
+    DATABASE_URL = os.getenv('DATABASE_URL')
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -167,7 +171,7 @@ LOGIN_REDIRECT_URL = 'gallery_home'
 LOGOUT_REDIRECT_URL = 'gallery_home'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = not DEBUG
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0

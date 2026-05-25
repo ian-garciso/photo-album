@@ -31,7 +31,7 @@ class GalleryListView(ListView):
         return context
 
 
-class RecipePhotoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class RecipePhotoCreateView(LoginRequiredMixin, CreateView):
     model = RecipePhoto
     form_class = RecipePhotoForm
     template_name = 'gallery/upload.html'
@@ -44,7 +44,7 @@ class RecipePhotoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
         return response
 
 
-class RecipePhotoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class RecipePhotoUpdateView(LoginRequiredMixin, UpdateView):
     model = RecipePhoto
     form_class = RecipePhotoForm
     template_name = 'gallery/edit.html'
@@ -57,7 +57,7 @@ class RecipePhotoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateV
         return response
 
 
-class RecipePhotoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class RecipePhotoDeleteView(LoginRequiredMixin,  DeleteView):
     model = RecipePhoto
     template_name = 'gallery/delete.html'
     permission_required = 'gallery.delete_recipephoto'

@@ -6,7 +6,8 @@ services:
     branch: main
     repo: https://github.com/ian-garciso/photo-album.git
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn recipe_project.wsgi
+    preDeployCommand: python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate --noinput && gunicorn recipe_project.wsgi
     envVars:
       - key: DEBUG
         value: False
@@ -25,4 +26,4 @@ services:
       - key: CLOUDINARY_API_SECRET
         sync: false
       - key: ALLOWED_HOSTS
-        value: your-app.onrender.com
+        value: photo-album-3y89.onrender.com

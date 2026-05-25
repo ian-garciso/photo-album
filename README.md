@@ -3,7 +3,7 @@
 A production-ready Django photo album management system with Cloudinary media storage, role-based access control, and Render deployment support.
 
 - Repository: https://github.com/ian-garciso/photo-album.git
-- Live demo: *replace-with-render-url*
+- Live demo: https://photo-album-3y89.onrender.com
 
 > The project includes `render.yaml` for Render service configuration. Set the required secrets in your Render dashboard and replace the live URL above once deployed.
 
@@ -67,6 +67,8 @@ python manage.py runserver
 - Set the environment variables in Render's dashboard using the same keys as above.
 - Use `gunicorn recipe_project.wsgi` as the start command.
 - Ensure a PostgreSQL database is provisioned and the `DATABASE_URL` secret points to it.
+- Render will run migrations and collect static files during build using `render.yaml`.
+- Set `ALLOWED_HOSTS` to the actual Render service hostname, for example `photo-album-3y89.onrender.com`, or leave it blank if you rely on `RENDER_EXTERNAL_HOSTNAME`.
 
 ## Environment Variables
 

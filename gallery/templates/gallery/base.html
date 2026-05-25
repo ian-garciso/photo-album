@@ -48,36 +48,56 @@
         .button-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
         .danger-btn { background: var(--danger); }
         .footer { margin-top: 3rem; color: var(--muted); font-size: 0.95rem; text-align: center; }
-        @media (max-width: 640px) { .site-header { flex-direction: column; align-items: flex-start; } }
+
+        @media (max-width: 640px) {
+            .site-header { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
+
 <body>
     <div class="site-shell">
+
         <header class="site-header">
             <div>
                 <a class="brand" href="{% url 'gallery_home' %}">Photo Album Manager</a>
                 <p class="subtitle">Secure album CRUD, Cloudinary media storage, and render-ready deployment.</p>
             </div>
+
             <div class="nav-links">
                 <a class="nav-link" href="{% url 'gallery_home' %}">Gallery</a>
-                <a class="btn" href="{% url 'photo_upload' %}">Upload Photo</a>
+
                 {% if user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    <a class="btn" href="{% url 'photo_upload' %}">Upload Photo</a>
+
+                    <!-- FIXED LOGOUT -->
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link" style="border:none; background:none; cursor:pointer;">
+                            Logout
+                        </button>
+                    </form>
+
                 {% else %}
                     <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
                 {% endif %}
             </div>
         </header>
 
         <main>
             <div class="content-card">
+
                 {% if messages %}
                     <div class="mb-1">
                         {% for message in messages %}
-                            <div style="border-radius: 16px; padding: 1rem; margin-bottom: 0.75rem; background: #eef2ff; color: #1d4ed8;">{{ message }}</div>
+                            <div style="border-radius: 16px; padding: 1rem; margin-bottom: 0.75rem; background: #eef2ff; color: #1d4ed8;">
+                                {{ message }}
+                            </div>
                         {% endfor %}
                     </div>
                 {% endif %}
+
                 {% block content %}{% endblock %}
             </div>
         </main>
@@ -85,6 +105,7 @@
         <footer class="footer">
             Built with Django, Cloudinary, and Render deployment best practices.
         </footer>
+
     </div>
 </body>
 </html>

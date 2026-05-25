@@ -4,10 +4,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from gallery.views import RegisterView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='gallery/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='gallery_home'), name='logout'),
+    path('accounts/register/', RegisterView.as_view(), name='register'),
     path('', include('gallery.urls')),
 ]
 

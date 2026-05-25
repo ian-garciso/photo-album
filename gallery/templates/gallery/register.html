@@ -1,0 +1,26 @@
+{% extends 'gallery/base.html' %}
+{% block title %}Register | Photo Album Manager{% endblock %}
+{% block content %}
+    <div style="max-width: 480px; margin: 0 auto;">
+        <h1 class="section-heading">Create an Account</h1>
+        <p class="muted">Register so you can upload and manage the photo album.</p>
+        <form method="post" style="margin-top: 1.5rem;">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="id_password1">Password</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="id_password2">Confirm Password</label>
+                {{ form.password2 }}
+            </div>
+            <button type="submit" class="btn">Create account</button>
+        </form>
+        <p class="muted" style="margin-top:1rem;">Already have an account? <a class="link-muted" href="{% url 'login' %}">Login here</a>.</p>
+    </div>
+{% endblock %}

@@ -1,5 +1,7 @@
-﻿from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib import messages
+﻿from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -73,3 +75,14 @@ class RecipePhotoDeleteView(LoginRequiredMixin,  DeleteView):
                 pass
         messages.success(request, f"'{title}' was deleted from the album.")
         return super().delete(request, *args, **kwargs)
+
+class RegisterView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'gallery/register.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Your account was created successfully. Please log in.')
+        return response
